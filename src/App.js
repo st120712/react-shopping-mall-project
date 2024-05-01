@@ -1,14 +1,37 @@
 import './App.css';
-import { Button, Navbar, Container, Nav } from 'react-bootstrap';
+import { Navbar, Container, Nav } from 'react-bootstrap';
 import bg from './img/bg.jpg';
 import { useState } from 'react';
 import data from './data.js';
-import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import Detail from './routes/detail.js';
+import axios from 'axios';
 
 function App() {
-  let [shoes] = useState(data);
+  let [shoes, setShoes] = useState(data);
   let navigate = useNavigate();
+
+  let getShoesData = (e) => {
+    var dataNum = 2;
+
+    if (shoes.length == 6) { dataNum = 3 }
+
+    if (shoes.length < 9) {
+      axios.get(`https://codingapple1.github.io/shop/data${dataNum}.json`)
+        .then((result) => {
+          var tmp = [...shoes];
+          result.data.map((m) => {
+            console.log(m);
+            m.img = `https://codingapple1.github.io/shop/shoes${m.id + 1}.jpg`;
+            tmp.push(m);
+            return m;
+          });
+
+          setShoes(tmp);
+        })
+        .catch((e) => { console.log(e) })
+    }
+  }
 
   return (
     <div className="App">
@@ -45,42 +68,31 @@ function App() {
               ></div>
               <div className="container">
                 <div className="row">
-                  {shoes.map((data, i) => (
-                    <Card data={data}></Card>
-                  ))}
+                  {shoes.map((data, i) => {
+                    return (< Card key={i} data={data} ></Card>)
+                  })}
                 </div>
               </div>
+
+              <button onClick={() => getShoesData()} >버튼</button>
+
             </>
           }
         />
-
         <Route path="/detail/:id" element={<Detail shoes={shoes} />} />
-
-        <Route path="/event" element={<Event></Event>}>
-          <Route path="one" element={<div>첫 주문시 양배추즙 서비스</div>} />
-          <Route path="two" element={<div>생일기념 쿠폰받기</div>} />
-        </Route>
-        <Route path="*" element={<div>없는페이지요</div>} />
       </Routes>
     </div>
   );
 }
 
-function Event() {
-  return (
-    <div>
-      <h4>오늘의 이벤트</h4>
-      <Outlet></Outlet>
-    </div>
-  );
-}
-
-function Card(props) {
+const Card = (props) => {
   return (
     <div className="col-md-4">
-      <img src={props.data.img} width="80%" />
-      <h4>{props.data.title}</h4>
-      <p>{props.data.price}원</p>
+      <Link to={'detail/' + props.data.id}>
+        <img alt="이미지없음" src={props.data.img} width="80%" />
+        <h4>{props.data.title}</h4>
+        <p>{props.data.price}원</p>
+      </Link>
     </div>
   );
 }
