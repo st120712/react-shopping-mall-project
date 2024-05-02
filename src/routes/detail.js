@@ -32,7 +32,7 @@ function Detail(props) {
         <div className="col-md-6">
           <img
             alt='고장'
-            src=""
+            src={shoes.img}
             width="100%"
           />
         </div>
@@ -47,13 +47,13 @@ function Detail(props) {
 
       <Nav variant='tabs' defaultActiveKey="link0">
         <Nav.Item>
-          <Nav.Link eventKey="link0">버튼0</Nav.Link>
+          <Nav.Link eventKey="link0" onClick={() => { setTab(0) }}>버튼0</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="link1">버튼1</Nav.Link>
+          <Nav.Link eventKey="link1" onClick={() => { setTab(1) }}>버튼1</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link eventKey="link2">버튼2</Nav.Link>
+          <Nav.Link eventKey="link2" onClick={() => { setTab(2) }}>버튼2</Nav.Link>
         </Nav.Item>
       </Nav>
 
@@ -63,15 +63,22 @@ function Detail(props) {
   );
 }
 
-function TabContent(props) {
-  switch (props.tab) {
-    case 0:
-      return <div>내용0</div>
-    case 1:
-      return <div>내용1</div>
-    case 2:
-      return <div>내용2</div>
-  }
+function TabContent({ tab }) {
+
+  let [fade, setFade] = useState('');
+
+  useEffect(() => {
+    let a = setTimeout(() => { setFade('end'); }, 10);
+
+    return () => {
+      clearTimeout(a);
+      setFade('');
+    }
+  }, [tab])
+
+  return (<div className={`start ${fade}`}>
+    {[<div>내용0</div>, <div>내용1</div>, <div>내용2</div>][tab]}
+  </div>)
 }
 
 export default Detail;
