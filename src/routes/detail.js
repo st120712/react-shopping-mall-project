@@ -18,47 +18,60 @@ function Detail(props) {
     }
   }, [])
 
+  let [d_fade, setDFade] = useState('');
+
+  useEffect(() => {
+    let a = setTimeout(() => { setDFade('end'); }, 10);
+
+    return () => {
+      clearTimeout(a);
+      setDFade('');
+    }
+  }, [id])
+
 
 
   return (
-    <div className="container">
-      {
-        alert ? <div className='alert alert-warning'>
-          2초이내 구매시 할인
-        </div> : null
-      }
+    <div className={`start ${d_fade}`}>
+      <div className="container">
+        {
+          alert ? <div className='alert alert-warning'>
+            2초이내 구매시 할인
+          </div> : null
+        }
 
-      <div className="row">
-        <div className="col-md-6">
-          <img
-            alt='고장'
-            src={shoes.img}
-            width="100%"
-          />
+        <div className="row">
+          <div className="col-md-6">
+            <img
+              alt='고장'
+              src={shoes.img}
+              width="100%"
+            />
+          </div>
+
+          <div className="col-md-6">
+            <h4 className="pt-5">{shoes.title}</h4>
+            <p>{shoes.content}</p>
+            <p>{shoes.price}원</p>
+            <button className="btn btn-danger">주문하기</button>
+          </div>
         </div>
 
-        <div className="col-md-6">
-          <h4 className="pt-5">{shoes.title}</h4>
-          <p>{shoes.content}</p>
-          <p>{shoes.price}원</p>
-          <button className="btn btn-danger">주문하기</button>
-        </div>
+        <Nav variant='tabs' defaultActiveKey="link0">
+          <Nav.Item>
+            <Nav.Link eventKey="link0" onClick={() => { setTab(0) }}>버튼0</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="link1" onClick={() => { setTab(1) }}>버튼1</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="link2" onClick={() => { setTab(2) }}>버튼2</Nav.Link>
+          </Nav.Item>
+        </Nav>
+
+        <TabContent tab={tab} />
+
       </div>
-
-      <Nav variant='tabs' defaultActiveKey="link0">
-        <Nav.Item>
-          <Nav.Link eventKey="link0" onClick={() => { setTab(0) }}>버튼0</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="link1" onClick={() => { setTab(1) }}>버튼1</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="link2" onClick={() => { setTab(2) }}>버튼2</Nav.Link>
-        </Nav.Item>
-      </Nav>
-
-      <TabContent tab={tab} />
-
     </div>
   );
 }
