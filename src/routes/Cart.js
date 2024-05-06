@@ -1,9 +1,10 @@
 import { Button, Table } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { decrease, deleteProduct, increase } from "./../store/cartSlice.js";
 
 function Cart() {
 
-	let item = useSelector((state) => { return state.cartItem });
+	let state = useSelector((state) => state);
 
 	return (
 		<div>
@@ -18,7 +19,7 @@ function Cart() {
 				</thead>
 				<tbody>
 					{
-						item.map((item, i) => { return (<ItemRow item={item} />) })
+						state.cartItem.map((item, i) => { return (<ItemRow item={item} />) })
 					}
 				</tbody>
 			</Table>
@@ -27,12 +28,20 @@ function Cart() {
 }
 
 function ItemRow(props) {
+	let dispatch = useDispatch();
+
 	return (<tr>
 		<td>{props.item.id}</td>
 		<td>{props.item.name}</td>
 		<td>{props.item.count}</td>
-		<td>안녕</td>
-	</tr>)
+		<td>
+			<button onClick={() => { dispatch(increase(props.item.id)) }}>+</button>
+			<button onClick={() => { dispatch(decrease(props.item.id)) }}>-</button>
+		</td>
+		<td>
+			<button onClick={() => { dispatch(deleteProduct(props.item.id)) }}>삭제</button>
+		</td>
+	</tr >)
 }
 
 export default Cart;

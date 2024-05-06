@@ -4,13 +4,14 @@ import bg from './img/bg.jpg';
 import { useState } from 'react';
 import data from './data.js';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
-import Detail from './routes/Detail.js';
 import axios from 'axios';
-import Cart from './routes/Cart.js'
+import Cart from './routes/Cart.js';
+import Detail from './routes/Detail.js';
+
 
 function App() {
-  let [shoes, setShoes] = useState(data);
 
+  let [shoes, setShoes] = useState(data);
   let navigate = useNavigate();
 
   let getShoesData = (e) => {
